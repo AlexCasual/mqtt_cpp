@@ -19,6 +19,16 @@
 #define MQTT_TLS_NS boost::asio::ssl
 #endif // !defined(MQTT_TLS_NS)
 
+#if !defined(MQTT_TLS_ERROR_COMPARISON)
+
+#if defined(SSL_R_SHORT_READ)
+#define MQTT_TLS_ERROR_COMPARISON(v) ERR_GET_REASON(v) == SSL_R_SHORT_READ
+#else // defined(SSL_R_SHORT_READ)
+#define MQTT_TLS_ERROR_COMPARISON(v) ERR_GET_REASON(v) == tls::error::stream_truncated
+#endif // defined(SSL_R_SHORT_READ)
+
+#endif // !defined(MQTT_TLS_ERROR_COMPARISON)
+
 #include <mqtt/namespace.hpp>
 
 namespace MQTT_NS {
